@@ -1,0 +1,15 @@
+x = 2;
+print((x * (5 - 3) + 2) / 3);
+index = 0;
+repeat {
+    print(index);
+} until index < 5;
+
+z = 1;
+if z == 1 {
+    goto flag;
+}
+print(1);
+flag:
+print(0);
+y = input();
