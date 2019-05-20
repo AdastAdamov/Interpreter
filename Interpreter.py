@@ -44,6 +44,17 @@ tabControl.pack(expand=1, fill=BOTH)
 
 
 def lexicalAnalysis():
+    global tab1, tab2, tab3
+    tab1.destroy()
+    tab1 = Frame(tabControl)
+    tabControl.add(tab1, text='Таблица лексем')
+    tab2.destroy()
+    tab2 = Frame(tabControl)
+    tabControl.add(tab2, text='Таблица переменных')
+    tab3.destroy()
+    tab3 = Frame(tabControl)
+    tabControl.add(tab3, text='Таблица констант')
+
     code = codeArea.get("0.0", str(index) + ".0")
     lex_list, var_list, con_list = LexicalAnalysator.analyze(code)
 

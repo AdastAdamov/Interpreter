@@ -3,7 +3,8 @@ def analyze(code):
     lexem_list, variable_list, constant_list = [], [], []
     lexem = ""
     keywords = ["print", "input", "repeat", "until", "goto", "if"]
-    operators = ["+","-","*","/","(",")",":"]
+    operators = ["+","-","*","/","(",")",":","=",";","{","}","<",">"]
+    whitespaces = [" ","\t"]
     while index < len(code):
         if code[index].isdigit():
             while code[index].isdigit():
@@ -20,7 +21,6 @@ def analyze(code):
             while code[index].isalpha() or code[index].isdigit():
                 lexem += code[index]
                 index += 1
-            print(lexem)
             if lexem in keywords:
                 lexem_list.append([line, lexem, "-"])
             else:
@@ -29,12 +29,18 @@ def analyze(code):
                 lexem_list.append([line, "Var", variable_list.index([lexem, ""])])
             lexem = ""
             continue
-
+        if code[index] in operators:
+            lexem_list.append([line, code[index], "-"])
+            index += 1
+            continue
+        if code[index] in whitespaces:
+            index += 1
+            continue
         if code[index] == "\n":
             line += 1
             index += 1
             continue
-        index += 1
+        raise Exception(str(line) + ":Unknown symbol")
 
 
     return lexem_list, variable_list, constant_list
