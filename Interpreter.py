@@ -4,7 +4,8 @@
 from tkinter import *
 from tkinter.ttk import *
 
-import LexicalAnalysator
+import LexicalAnalyzer
+import SyntaxAnalyzer
 
 tk = Tk()
 line1 = Frame(tk)
@@ -23,11 +24,6 @@ with open("code.txt") as file:
     for line in file.readlines():
         codeArea.insert(str(index) + ".0", line)
         index += 1
-
-def lexicalAnalysis():
-    code = codeArea.get("0.0", str(index) + ".0")
-    lex_list, var_list, con_list = LexicalAnalysator.analyze(code)
-
 
 scroll = Scrollbar(line1, command=codeArea.yview)
 scroll.pack(side=LEFT, fill=Y)
@@ -56,7 +52,8 @@ def lexicalAnalysis():
     tabControl.add(tab3, text='Таблица констант')
 
     code = codeArea.get("0.0", str(index) + ".0")
-    lex_list, var_list, con_list = LexicalAnalysator.analyze(code)
+    lex_list, var_list, con_list = LexicalAnalyzer.analyze(code)
+    SyntaxAnalyzer.analyze(lex_list, var_list, con_list)
 
     table = Treeview(tab1, selectmode="browse")
     table["columns"] = ("one", "two", "three")

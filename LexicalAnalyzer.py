@@ -2,9 +2,9 @@ def analyze(code):
     index, line = 0, 1
     lexem_list, variable_list, constant_list = [], [], []
     lexem = ""
-    keywords = ["print", "input", "repeat", "until", "goto", "if"]
-    operators = ["+","-","*","/","(",")",":","=",";","{","}","<",">"]
-    whitespaces = [" ","\t"]
+    keywords = ["print", "repeat", "until", "goto", "if"]
+    operators = ["+", "-", "*", "/", "(", ")", ":", "=", ";", "{", "}", "<", ">"]
+    whitespaces = [" ", "\t"]
     while index < len(code):
         if code[index].isdigit():
             while code[index].isdigit():
