@@ -6,6 +6,8 @@ from tkinter.ttk import *
 
 import LexicalAnalyzer
 import SyntaxAnalyzer
+import PolishCodeGenerator
+import PolishCodeInterpreter
 
 tk = Tk()
 line1 = Frame(tk)
@@ -51,9 +53,13 @@ def lexicalAnalysis():
     tab3 = Frame(tabControl)
     tabControl.add(tab3, text='Таблица констант')
 
-    code = codeArea.get("0.0", str(index) + ".0")
+    code = codeArea.get("0.0", "999.0")
     lex_list, var_list, con_list = LexicalAnalyzer.analyze(code)
     SyntaxAnalyzer.analyze(lex_list, var_list, con_list)
+    poliz_list = PolishCodeGenerator.generatePOLIZ(lex_list, var_list, con_list)
+    for element in poliz_list:
+        print(element[1] + " ", end="")
+    PolishCodeInterpreter.run(poliz_list, lex_list, var_list, con_list)
 
     table = Treeview(tab1, selectmode="browse")
     table["columns"] = ("one", "two", "three")
