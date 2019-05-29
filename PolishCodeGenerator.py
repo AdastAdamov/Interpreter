@@ -1,7 +1,10 @@
 def generatePOLIZ(lexem_list, variable_list, constant_list):
     priorityTable = {
         ";": 1,
+        ":": 1,
         "=": 2,
+        "print": 2,
+        "goto": 2,
         "(": 3,
         ")": 4,
         "+": 4,
@@ -17,8 +20,18 @@ def generatePOLIZ(lexem_list, variable_list, constant_list):
         elif len(stack) == 0:
             stack.append(lexem_list[index])
 
-        #elif lexem_list[index][1] == "(":
+        elif lexem_list[index][1] == "goto":
+            stack.append(lexem_list[index])
+            index += 1
+            stack.append(lexem_list[index])
 
+        elif lexem_list[index][1] == "(":
+            stack.append(lexem_list[index])
+
+        elif lexem_list[index][1] == ")":
+            while stack[-1][1] != "(":
+                line.append(stack.pop())
+            stack.pop()
 
         elif lexem_list[index][1] == ";":
             while len(stack) != 0:

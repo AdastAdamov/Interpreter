@@ -66,6 +66,7 @@ def lexicalAnalysis():
         Output_text = PolishCodeInterpreter.run(poliz_list, lex_list, var_list, con_list)
     except Exception as e:
         Output_text = "Line " + str(e)
+        raise e
 
     text2.config(state=NORMAL)
     text2.delete(1.0, END)

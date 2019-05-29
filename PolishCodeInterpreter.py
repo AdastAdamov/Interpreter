@@ -1,6 +1,7 @@
-def run(executableLineOriginal, lexem_list, variable_list, constant_list):
-    operators = [";","=","(",")","+","-","*","/"]
-    executableLine = executableLineOriginal[:]
+def run(executableLine, lexem_list, variable_list, constant_list):
+    operators = [";","=","(",")","+","-","*","/","print", "goto"]
+    stack = []
+    output = ""
 
     def getValue(lexem):
         if not isinstance(lexem, list):
@@ -16,34 +17,28 @@ def run(executableLineOriginal, lexem_list, variable_list, constant_list):
 
     index = 0
     while index < len(executableLine):
-        if executableLine[index][1] not in operators:
-            pass
+        if executableLine[index][1] == "Var" and executableLine[index+1][1] == ":":
+            index += 1
+        elif executableLine[index][1] not in operators:
+            stack.append(executableLine[index])
         elif executableLine[index][1] == "*":
-            executableLine[index] = getValue(executableLine[index-2]) * getValue(executableLine[index-1])
-            del executableLine[index-1]
-            del executableLine[index-2]
-            index -= 2
+            stack.append(getValue(stack.pop()) * getValue(stack.pop()))
         elif executableLine[index][1] == "/":
-            executableLine[index] = getValue(executableLine[index-2]) / getValue(executableLine[index-1])
-            del executableLine[index-1]
-            del executableLine[index-2]
-            index -= 2
+            stack.append(getValue(stack.pop(-2)) / getValue(stack.pop()))
         elif executableLine[index][1] == "+":
-            executableLine[index] = getValue(executableLine[index-2]) + getValue(executableLine[index-1])
-            del executableLine[index-1]
-            del executableLine[index-2]
-            index -= 2
+            stack.append(getValue(stack.pop()) + getValue(stack.pop()))
         elif executableLine[index][1] == "-":
-            executableLine[index] = getValue(executableLine[index-2]) - getValue(executableLine[index-1])
-            del executableLine[index-1]
-            del executableLine[index-2]
-            index -= 2
+            stack.append(getValue(stack.pop(-2)) - getValue(stack.pop()))
         elif executableLine[index][1] == "=":
-            variable_list[executableLine[index-2][2]][1] = getValue(executableLine[index-1])
-            del executableLine[index]
-            del executableLine[index-1]
-            del executableLine[index-2]
-            index -= 3
+            variable_list[stack.pop()[2]][1] = getValue(stack.pop())
+        elif executableLine[index][1] == "print":
+            output += str(getValue(stack.pop())) + "\n"
+        elif executableLine[index][1] == "goto":
+            target = executableLine[index+1][1]
+            index = 0
+            while executableLine[index][1] != target or executableLine[index+1][1] != ":":
+                index += 1
+            index += 1
         index += 1
 
-    return ""
+    return output
