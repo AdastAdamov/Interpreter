@@ -40,9 +40,11 @@ tab3 = Frame(tabControl)
 tabControl.add(tab3, text='Таблица констант')
 tabControl.pack(expand=1, fill=BOTH)
 
+Output_text = ""
 
 def lexicalAnalysis():
-    global tab1, tab2, tab3
+    global tab1, tab2, tab3, text2
+
     tab1.destroy()
     tab1 = Frame(tabControl)
     tabControl.add(tab1, text='Таблица лексем')
@@ -53,13 +55,22 @@ def lexicalAnalysis():
     tab3 = Frame(tabControl)
     tabControl.add(tab3, text='Таблица констант')
 
-    code = codeArea.get("0.0", "999.0")
+    code = codeArea.get("0.0", END)
     lex_list, var_list, con_list = LexicalAnalyzer.analyze(code)
-    SyntaxAnalyzer.analyze(lex_list, var_list, con_list)
-    poliz_list = PolishCodeGenerator.generatePOLIZ(lex_list, var_list, con_list)
-    for element in poliz_list:
-        print(element[1] + " ", end="")
-    PolishCodeInterpreter.run(poliz_list, lex_list, var_list, con_list)
+
+    try:
+        SyntaxAnalyzer.analyze(lex_list, var_list, con_list)
+        poliz_list = PolishCodeGenerator.generatePOLIZ(lex_list, var_list, con_list)
+        for element in poliz_list:
+            print(element[1] + " ", end="")
+        Output_text = PolishCodeInterpreter.run(poliz_list, lex_list, var_list, con_list)
+    except Exception as e:
+        Output_text = "Line " + str(e)
+
+    text2.config(state=NORMAL)
+    text2.delete(1.0, END)
+    text2.insert("1.0", Output_text)
+    text2.config(state=DISABLED)
 
     table = Treeview(tab1, selectmode="browse")
     table["columns"] = ("one", "two", "three")

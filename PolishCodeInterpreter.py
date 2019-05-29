@@ -6,7 +6,9 @@ def run(executableLineOriginal, lexem_list, variable_list, constant_list):
         if not isinstance(lexem, list):
             return lexem
         if lexem[1]=='Var':
-            return variable_list[lexem[2]][2]
+            if variable_list[lexem[2]][1] == "":
+                raise Exception(str(lexem[0]) + " : Variable was not initialized.")
+            return variable_list[lexem[2]][1]
         elif lexem[1]=='Con':
             return constant_list[lexem[2]]
         else:
@@ -43,3 +45,5 @@ def run(executableLineOriginal, lexem_list, variable_list, constant_list):
             del executableLine[index-2]
             index -= 3
         index += 1
+
+    return ""
